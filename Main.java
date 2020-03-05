@@ -1,1 +1,98 @@
-package digitalBookstore;import java.util.*;import static digitalBookstore.Books.*;public class Main {    public static Map<Integer, Users> users = new HashMap<>();    public static Map<Integer, List<Books>> books = new HashMap<>();    public static List<Object> listBasket = new ArrayList<>();    public static List<Double> listPrices = new ArrayList<>();    public static Double[] prices = new Double[10];    public static void main(String[] args) {        Users user1 = new Users("Piotr Tomaszewski", 1997, 89566660);        Users user2 = new Users("Robert Morela", 1980, 89000077);        Users user3 = new Users("Laura Collins", 1980, 89090004);        Users user4 = new Users("Maciej Koper Guru IT", 1984, 77090004);        users.put(1001, user1);        users.put(3001, user2);        users.put(2001, user3);        users.put(5001, user4);        Set<Integer> keySet = users.keySet();        Collection<Users> values = users.values();        books.put(1, adultBooks);        books.put(2, childrenBooks);        Scanner scan = new Scanner(System.in);        System.out.println("Witaj w DIGITAL BOOKSTORE !");        System.out.println("Jeśli chcesz się zalogować, wpisz  '0'  i naciśnij Enter");        System.out.println("Jeśli chcesz zmienić swoje dane osobowe, w tym celu wpisz '1' i naciśnij ENTER");        System.out.println("Jeśli chcesz zapisać się do  DIGITAL BOOKSTORE, naciśnij '11'  i ENTER");        int x = scan.nextInt();        if (x == 0) {            System.out.println("Wpisz numer swojego ID i naciśnij Enter ");            int y = scan.nextInt();            if (users.containsKey(y) == true) {                System.out.println("ID potwierdzone! Witaj w sklepie: " + users.get(y).toString());            }            try {            } catch (InputMismatchException e) {                System.out.println("Podaj poprawną liczbę!");                // ignoring wrong token                scan.next();            }        }        if (x == 1) {            System.out.println("Wpisz kolejno : numer swojego ID i naciśnij  ENTER");            int userId = scan.nextInt();            updateUser(userId, name, dateOfBirth, phoneNumber);            System.out.println("Oto Twoje zmienione dane: " + users.get(userId));            System.out.println("Jeśli chcesz kupić książkę dla dorosłych wpisz '2', a jeśli dla dzieci wpisz '3' ");        }        if (x == 11) {            createNewUser(name, dateOfBirth, phoneNumber);        }// CASE 1: KLIENT WYBRAŁ KSIĄŻKI DLA DDOROSŁYCH :        System.out.println("Jeśli chcesz kupić książkę dla dorosłych wpisz '2', a jeśli da dzieci wpisz '3' ");        int y = scan.nextInt();        if (y == 2) {            buyAdultBooks();        }// CASE 2 : KLIENT WYBRAŁ KSIĄŻKI DLA DZIECI :        if (y == 3) {            buyChildrenBooks();        }    }// Koniec metody main. Metody nowe:    static int phoneNumber;    static String name;    static int dateOfBirth;    private static void updateUser(int userId, String name, int dateOfBirth, int phoneNumber) {        Users user = users.get(userId);        System.out.println("Podaj kolejne dane:");        Scanner scan = new Scanner(System.in);        System.out.println("Aktualizuj imię i nazwisko:");        String x = scan.nextLine();        user.setName(x);        System.out.println("Aktualizuj datę urodzenia:");        int x1 = scan.nextInt();        user.setDateOfBirth(x1);        System.out.println("Aktualizuj numer telefonu:");        int x2 = scan.nextInt();        user.setPhone(x2);    }    private static void createNewUser(String name, int dateOfBirth, int phoneNumber) {        System.out.println("Podaj kolejne dane:");        Scanner scan = new Scanner(System.in);        System.out.println("Wprowadź imię i nazwisko:");        Users user = new Users(name, dateOfBirth, phoneNumber);        String x = scan.nextLine();        user.setName(x);        System.out.println("Wprowadź datę urodzenia:");        int x1 = scan.nextInt();        user.setDateOfBirth(x1);        System.out.println("Wprowadź numer telefonu:");        int x2 = scan.nextInt();        user.setPhone(x2);        System.out.println("Wprowadź nowe ID, podając liczbę od 1000 - 9000");        int id = scan.nextInt();        if (users.containsKey(id)) {            System.out.println("Podaj inny numer");            scan.nextInt();        }        else if (users.containsKey(id)) {            System.out.println("Podaj inny numer");            scan.nextInt();        }        else if (!users.containsKey(id)) {            users.put(id, user);            System.out.println("Oto Twoje dane: " + users.get(id).toString());        }else System.out.println(" Niepoprawny numer " );    }    private static void addToBasket(Books y) {        listBasket.add(y);    }    private static void pay() {        System.out.println("Oto Twoje zamówienie: " + listBasket.toString());        System.out.println("Teraz możesz już użyć swojej złotej karty kredytowej.");        System.out.println("Jeśli chcesz wrócić do zakupów i kupić książkę dla dorosłych wpisz '2', a jeśli dLa dzieci wpisz '3' ");        Scanner scan = new Scanner(System.in);        int z = scan.nextInt();        if (z == 2) {            buyAdultBooks();        }        if (z == 3) {            buyAdultBooks();        }    }    //  NOWA METODA CASE 1: KLIENT WYBRAŁ KSIĄŻKI DLA DDOROSSŁYCH :    private static void buyAdultBooks() {        Scanner scan = new Scanner(System.in);            System.out.println(adultBooks.toString());            System.out.println("Wybierz numer książki, by dodać do koszyka.");            int z = scan.nextInt();            if (z == 10) {                addToBasket(book_A001);                listPrices.add(book_A001.getPrice());                prices = new Double[]{book_A001.getPrice()};                System.out.println("Jeśli chcesz przejść do płatności naciśnij: 1 ");                int w = scan.nextInt();                if (w == 1) {                    System.out.println("RAZEM w koszyku do zapłaty: ");                    for (int price = 0; price < listPrices.size(); price++) {                        System.out.println(listPrices.get(price));                    }                    pay();                }            }            if (z == 20) {                addToBasket(book_A002);                listPrices.add(book_A002.getPrice());                System.out.println("Jeśli chcesz przejść do płatności naciśnij: 1 ");                int w = scan.nextInt();                if (w == 1) {                    System.out.println("RAZEM w koszyku do zapłaty: ");                    for (Object price : listPrices) {                        System.out.println(price);                    }                    pay();                }            }            if (z == 30) {                addToBasket(book_A003);                listPrices.add(book_A003.getPrice());                System.out.println("Jeśli chcesz przejść do płatności naciśnij: 1 ");                int w = scan.nextInt();                if (w == 1) {                    System.out.println("RAZEM w koszyku do zapłaty: ");                    for (int price = 0; price < listPrices.size(); price++) {                        System.out.println(listPrices.get(price));                    }                    pay();                }                int e = scan.nextInt();            }        }    private static void buyChildrenBooks(){        Scanner scan = new Scanner(System.in);            System.out.println("Wybierz numer książki, by dodać do koszyka.");            int z1 = scan.nextInt();            if (z1 == 40) {                addToBasket(book_C001);                listPrices.add(book_C001.getPrice());                prices = new Double[]{book_C001.getPrice()};                System.out.println("Jeśli chcesz przejść do płatności naciśnij: 1 ");                int w = scan.nextInt();                if (w == 1) {                    System.out.println("RAZEM w koszyku do zapłaty: ");                    for (int price = 0; price < listPrices.size(); price++) {                        System.out.println(listPrices.get(price));                    }                    pay();                }            }            if (z1 == 50) {                addToBasket(book_C002);                listPrices.add(book_C002.getPrice());                System.out.println("Jeśli chcesz przejść do płatności naciśnij: 1 ");                int w = scan.nextInt();                if (w == 1) {                    pay();                    System.out.println("RAZEM w koszyku do zapłaty: ");                    for (Object price : listPrices) {                        System.out.println(price);                    }                }                int e = scan.nextInt();                if (e == 1) {                    buyAdultBooks();                }            }            if (z1 == 60) {                addToBasket(book_C003);                listPrices.add(book_C003.getPrice());                System.out.println("Jeśli chcesz przejść do płatności naciśnij: 1 ");                int w = scan.nextInt();                if (w == 1) {                    pay();                    System.out.println("RAZEM w koszyku do zapłaty: ");                    for (int price = 0; price < listPrices.size(); price++) {                        System.out.println(listPrices.get(price));                    }                }                int e = scan.nextInt();                if (e == 1) {                    buyAdultBooks();                }            }        }}// System.out.println(users.toString());// System.out.println("Klucze  to: \n" + keySet.toString() + " ; \n" +//        " Użytkownicy to: \n " + values.toString());// for (Map.Entry<Integer, Users> entry : users.entrySet()) {//   System.out.println("Klucz  nr: " + entry.getKey().toString() + " : " + "Użytkownik : " + entry.getValue().toString());// }//  System.out.println( listBasket.size());//  int s=listBasket.size();// System.out.println( listBasket.get(s-1));// System.out.println( book_A001.getPrice() );
+package digitalBookstore;
+
+import java.util.*;
+
+import static digitalBookstore.Books.*;
+import static digitalBookstore.Users.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Map<Integer, Users> users = new HashMap<>();
+        Map<Integer, List<Books>> books = new HashMap<>();
+        List<Object> listBasket = new ArrayList<>();
+        List<Double> listPrices = new ArrayList<>();
+
+        Methods method1 = new Users();
+        Methods method2 = new Users();
+        Methods method3 = new Books();
+        Methods method4 = new Books();
+
+        Users user1 = new Users("Piotr Tomaszewski", 1997, 89566660);
+        Users user2 = new Users("Robert Morela", 1980, 89000077);
+        Users user3 = new Users("Laura Collins", 1980, 89090004);
+        Users user4 = new Users("Maciej Boguszewicz", 1984, 77090004);
+
+        users.put(1001, user1);
+        users.put(3001, user2);
+        users.put(2001, user3);
+        users.put(5001, user4);
+
+//        System.out.println(users.get(3001));
+//        Set<Integer> keySet = users.keySet();
+//        Collection<Users> values = users.values();
+//        System.out.println(keySet);
+//        System.out.println(values);
+
+        books.put(1, adultBooks);
+        books.put(2, childrenBooks);
+
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("Witaj w DIGITAL BOOKSTORE !");
+        System.out.println("Jeśli chcesz się zalogować, wpisz  '0'  i naciśnij Enter ");
+        System.out.println("Jeśli chcesz zmienić swoje dane osobowe, w tym celu wpisz '1' i naciśnij ENTER." +
+                " \nUwaga. Powyższa funkcja chwilowo niedostępna. Trwają prace serwisowe");
+        System.out.println("Jeśli chcesz zapisać się do  DIGITAL BOOKSTORE, naciśnij '11'  i ENTER");
+
+        int x = scan.nextInt();
+
+        if (x == 0) {
+            System.out.println("Wpisz numer swojego ID i naciśnij Enter \nDla potrzeb testu wpisz: 1001 ");
+            int y = scan.nextInt();
+            if (users.containsKey(y) == true) {
+                System.out.println("ID potwierdzone! Witaj w sklepie: " + users.get(y).toString());
+            }
+            try {
+
+            } catch (InputMismatchException e) {
+                System.out.println("Podaj poprawną liczbę!");
+                // ignoring wrong token
+                scan.next();
+            }
+        }
+
+        if (x == 1) {
+            System.out.println("Wpisz kolejno : numer swojego ID i naciśnij  ENTER  \nDo testu przyjmij 1001");
+            method1.updateUser(name, dateOfBirth, phoneNumber);
+            System.out.println("Jeśli chcesz kupić książkę dla dorosłych wpisz '2', a jeśli dla dzieci wpisz '3' ");
+        }
+
+        if (x == 11) {
+            method2.createNewUser(name, dateOfBirth, phoneNumber);
+        }
+// CASE 1: KLIENT WYBRAŁ KSIĄŻKI DLA DDOROSŁYCH :
+        System.out.println("Jeśli chcesz kupić książkę dla dorosłych wpisz '2', a jeśli da dzieci wpisz '3' ");
+        int y = scan.nextInt();
+        if (y == 2) {
+            method3.buyAdultBooks();
+        }
+// CASE 2 : KLIENT WYBRAŁ KSIĄŻKI DLA DZIECI :
+        if (y == 3) {
+            method4.buyChildrenBooks();
+        }
+    }
+
+
+}
+// System.out.println(users.toString());
+// System.out.println("Klucze  to: \n" + keySet.toString() + " ; \n" +
+//        " Użytkownicy to: \n " + values.toString());
+// for (Map.Entry<Integer, Users> entry : users.entrySet()) {
+//   System.out.println("Klucz  nr: " + entry.getKey().toString() + " : " + "Użytkownik : " + entry.getValue().toString());
+// }
+//  System.out.println( listBasket.size());
+//  int s=listBasket.size();
+// System.out.println( listBasket.get(s-1));
+// System.out.println( book_A001.getPrice() );
